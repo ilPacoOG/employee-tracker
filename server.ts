@@ -44,12 +44,12 @@ function startApp() {
             case 'View all roles':
                 viewRoles();
                 break;
-            // case 'View all employees':
-            //     viewEmployees();
-            //     break;
-            // case 'Add a department':
-            //     addDepartment();
-            //     break;
+            case 'View all employees':
+                viewEmployees();
+                break;
+            case 'Add a department':
+                addDepartment();
+                break;
             // case 'Add a role':
             //     addRole();
             //     break;
@@ -101,9 +101,50 @@ function viewRoles() {
     });
 }
 
-startApp();
 // View all employees
+function viewEmployees() {
+    client.query(
+        `SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+         FROM employee
+         JOIN role ON employee.role_id = role.id
+         JOIN department ON role.department_id = department.id
+         LEFT JOIN employee manager ON employee.manager_id = manager.id`,
+        (err, res) => {
+            if (err) {
+                console.error('Error fetching employees:', err);
+            } else {
+                console.table(res.rows);
+            }
+            startApp(); 
+    });
+}
+
+
+
 // Add a department
+
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'Enter the name of the department:'
+        }
+    ]).then((answers) => {
+        client.query('INSERT INTO department (name) VALUES ($1)', [answers.name], (err, res) => {
+            if (err) {
+                console.error('Error adding department:', err);
+            } else {
+                console.log('Department added successfully');
+            }
+            startApp();
+        });
+    });
+}
+
 // Add a role
 // Add an employee
 // Update an employee role
+
+startApp();
+
