@@ -72,11 +72,16 @@ function startApp() {
 
 function viewDepartments() {
     client.query('SELECT * FROM department', (err, res) => {
-        if (err) throw err;
-        console.table(res.rows);
-        startApp();
+        if (err) {
+            console.error('Error fetching departments:', err);
+        } else {
+            console.table(res.rows);
+        }
+        startApp(); 
     });
 }
+
+startApp();
 
 
 // View all roles
