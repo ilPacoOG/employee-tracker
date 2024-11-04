@@ -41,9 +41,9 @@ function startApp() {
             case 'View all departments':
                 viewDepartments();
                 break;
-            // case 'View all roles':
-            //     viewRoles();
-            //     break;
+            case 'View all roles':
+                viewRoles();
+                break;
             // case 'View all employees':
             //     viewEmployees();
             //     break;
@@ -81,10 +81,27 @@ function viewDepartments() {
     });
 }
 
-startApp();
+
 
 
 // View all roles
+
+function viewRoles() {
+    client.query(
+        `SELECT role.id, role.title, role.salary, department.name AS department
+         FROM role
+         JOIN department ON role.department_id = department.id`,
+        (err, res) => {
+            if (err) {
+                console.error('Error fetching roles:', err);
+            } else {
+                console.table(res.rows);
+            }
+            startApp(); 
+    });
+}
+
+startApp();
 // View all employees
 // Add a department
 // Add a role
