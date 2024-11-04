@@ -38,15 +38,15 @@ function startApp() {
             case 'View all roles':
                 viewRoles();
                 break;
-            // case 'View all employees':
-            //     viewEmployees();
-            //     break;
-            // case 'Add a department':
-            //     addDepartment();
-            //     break;
-            // case 'Add a role':
-            //     addRole();
-            //     break;
+            case 'View all employees':
+                viewEmployees();
+                break;
+            case 'Add a department':
+                addDepartment();
+                break;
+            case 'Add a role':
+                addRole();
+                break;
             // case 'Add an employee':
             //     addEmployee();
             //     break;
@@ -85,9 +85,72 @@ function viewRoles() {
         startApp();
     });
 }
-startApp();
 // View all employees
+function viewEmployees() {
+    client.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+         FROM employee
+         JOIN role ON employee.role_id = role.id
+         JOIN department ON role.department_id = department.id
+         LEFT JOIN employee manager ON employee.manager_id = manager.id`, (err, res) => {
+        if (err) {
+            console.error('Error fetching employees:', err);
+        }
+        else {
+            console.table(res.rows);
+        }
+        startApp();
+    });
+}
 // Add a department
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'Enter the name of the department:'
+        }
+    ]).then((answers) => {
+        client.query('INSERT INTO department (name) VALUES ($1)', [answers.name], (err, res) => {
+            if (err) {
+                console.error('Error adding department:', err);
+            }
+            else {
+                console.log('Department added successfully');
+            }
+            startApp();
+        });
+    });
+}
 // Add a role
+function addRole() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Enter the title of the role:'
+        },
+        {
+            type: 'number',
+            name: 'salary',
+            message: 'Enter the salary of the role:'
+        },
+        {
+            type: 'number',
+            name: 'department_id',
+            message: 'Enter the department ID of the role:'
+        }
+    ]).then((answers) => {
+        client.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [answers.title, answers.salary, answers.department_id], (err, res) => {
+            if (err) {
+                console.error('Error adding role:', err);
+            }
+            else {
+                console.log('Role added successfully');
+            }
+            startApp();
+        });
+    });
+}
 // Add an employee
 // Update an employee role
+startApp();
