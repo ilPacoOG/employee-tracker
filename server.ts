@@ -50,9 +50,9 @@ function startApp() {
             case 'Add a department':
                 addDepartment();
                 break;
-            // case 'Add a role':
-            //     addRole();
-            //     break;
+            case 'Add a role':
+                addRole();
+                break;
             // case 'Add an employee':
             //     addEmployee();
             //     break;
@@ -143,6 +143,36 @@ function addDepartment() {
 }
 
 // Add a role
+
+function addRole() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Enter the title of the role:'
+        },
+        {
+            type: 'number',
+            name: 'salary',
+            message: 'Enter the salary of the role:'
+        },
+        {
+            type: 'number',
+            name: 'department_id',
+            message: 'Enter the department ID of the role:'
+        }
+    ]).then((answers) => {
+        client.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [answers.title, answers.salary, answers.department_id], (err, res) => {
+            if (err) {
+                console.error('Error adding role:', err);
+            } else {
+                console.log('Role added successfully');
+            }
+            startApp();
+        });
+    });
+}
+
 // Add an employee
 // Update an employee role
 
