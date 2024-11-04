@@ -102,34 +102,20 @@ function viewRoles() {
 }
 
 // View all employees
-// function viewEmployees() {
-//     client.query(
-//         `SELECT 
-//             employee.id AS employee_id, 
-//             employee.first_name, 
-//             employee.last_name, 
-//             role.title AS role_title, 
-//             role.salary, 
-//             department.name AS department_name, 
-//             CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name
-//             FROM employee
-//             JOIN role ON employee.role_id = role.id
-//             JOIN department ON role.department_id = department.id
-//             LEFT JOIN employee AS manager ON employee.manager_id = manager.id`,
-//         (err, res) => {
-//             if (err) {
-//                 console.error('Error fetching employees:', err);
-//             } else {
-//                 console.table(res.rows);
-//             }
-//             startApp(); 
-//     });
-// }
-
 function viewEmployees() {
     client.query(
-        `SELECT employee.id, employee.first_name, employee.last_name
-         FROM employee`,
+        `SELECT 
+            employee.id AS employee_id, 
+            employee.first_name, 
+            employee.last_name, 
+            role.title AS role_title, 
+            role.salary, 
+            department.name AS department_name, 
+            CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name
+            FROM employee
+            JOIN role ON employee.role_id = role.id
+            JOIN department ON role.department_id = department.id
+            LEFT JOIN employee AS manager ON employee.manager_id = manager.id`,
         (err, res) => {
             if (err) {
                 console.error('Error fetching employees:', err);
@@ -139,6 +125,20 @@ function viewEmployees() {
             startApp(); 
     });
 }
+
+// function viewEmployees() {
+//     client.query(
+//         `SELECT employee.id, employee.first_name, employee.last_name
+//          FROM employee`,
+//         (err, res) => {
+//             if (err) {
+//                 console.error('Error fetching employees:', err);
+//             } else {
+//                 console.table(res.rows);
+//             }
+//             startApp(); 
+//     });
+// }
 
 
 
