@@ -18,7 +18,7 @@ client.connect();
 
 //From assignment readme. I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
 
-//start the application by asking the user what they would like to do
+//Start the application by asking the user what they would like to do
 function startApp() {
     inquirer.prompt([
         {
@@ -56,9 +56,9 @@ function startApp() {
             case 'Add an employee':
                 addEmployee();
                 break;
-            // case 'Update an employee role':
-            //     updateEmployeeRole();
-            //     break;
+            case 'Update an employee role':
+                updateEmployeeRole();
+                break;
             case 'Exit':
                 console.log('Goodbye!');
                 break;
@@ -125,23 +125,6 @@ function viewEmployees() {
             startApp(); 
     });
 }
-
-// function viewEmployees() {
-//     client.query(
-//         `SELECT employee.id, employee.first_name, employee.last_name
-//          FROM employee`,
-//         (err, res) => {
-//             if (err) {
-//                 console.error('Error fetching employees:', err);
-//             } else {
-//                 console.table(res.rows);
-//             }
-//             startApp(); 
-//     });
-// }
-
-
-
 
 // Add a department
 
@@ -256,4 +239,7 @@ function updateEmployeeRole() {
 }
 
 startApp();
+
+
+// As time permits, I would like to add a function that creates and seeds the database with the schema.sql and seeds.sql files when the app is started.
 
