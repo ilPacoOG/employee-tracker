@@ -16,7 +16,7 @@ const client = new Client({
 
 client.connect();
 
-//I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+//From assignment readme. I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
 
 //start the application by asking the user what they would like to do
 function startApp() {
@@ -53,9 +53,9 @@ function startApp() {
             case 'Add a role':
                 addRole();
                 break;
-            // case 'Add an employee':
-            //     addEmployee();
-            //     break;
+            case 'Add an employee':
+                addEmployee();
+                break;
             // case 'Update an employee role':
             //     updateEmployeeRole();
             //     break;
@@ -196,7 +196,64 @@ function addRole() {
 }
 
 // Add an employee
+function addEmployee() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'Enter the first name of the employee:'
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'Enter the last name of the employee:'
+        },
+        {
+            type: 'number',
+            name: 'role_id',
+            message: 'Enter the role ID of the employee:'
+        },
+        {
+            type: 'number',
+            name: 'manager_id',
+            message: 'Enter the manager ID of the employee:'
+        }
+    ]).then((answers) => {
+        client.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [answers.first_name, answers.last_name, answers.role_id, answers.manager_id], (err, res) => {
+            if (err) {
+                console.error('Error adding employee:', err);
+            } else {
+                console.log('Employee added successfully');
+            }
+            startApp();
+        });
+    });
+}
+
 // Update an employee role
+function updateEmployeeRole() {
+    inquirer.prompt([
+        {
+            type: 'number',
+            name: 'employee_id',
+            message: 'Enter the ID of the employee you want to update:'
+        },
+        {
+            type: 'number',
+            name: 'role_id',
+            message: 'Enter the new role ID of the employee:'
+        }
+    ]).then((answers) => {
+        client.query('UPDATE employee SET role_id = $1 WHERE id = $2', [answers.role_id, answers.employee_id], (err, res) => {
+            if (err) {
+                console.error('Error updating employee role:', err);
+            } else {
+                console.log('Employee role updated successfully');
+            }
+            startApp();
+        });
+    });
+}
 
 startApp();
 
