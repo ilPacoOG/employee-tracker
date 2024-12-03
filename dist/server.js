@@ -117,7 +117,7 @@ function addDepartment() {
             message: 'Enter the name of the department:'
         }
     ]).then((answers) => {
-        client.query('INSERT INTO department (name) VALUES ($1)', [answers.name], (err, res) => {
+        client.query('INSERT INTO department (name) VALUES ($1)', [answers.name], (err) => {
             if (err) {
                 console.error('Error adding department:', err);
             }
@@ -147,7 +147,7 @@ function addRole() {
             message: 'Enter the department ID of the role:'
         }
     ]).then((answers) => {
-        client.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [answers.title, answers.salary, answers.department_id], (err, res) => {
+        client.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', [answers.title, answers.salary, answers.department_id], (err) => {
             if (err) {
                 console.error('Error adding role:', err);
             }
@@ -207,7 +207,7 @@ function updateEmployeeRole() {
             message: 'Enter the new role ID of the employee:'
         }
     ]).then((answers) => {
-        client.query('UPDATE employee SET role_id = $1 WHERE id = $2', [answers.role_id, answers.employee_id], (err, res) => {
+        client.query('UPDATE employee SET role_id = $1 WHERE id = $2', [answers.role_id, answers.employee_id], (err) => {
             if (err) {
                 console.error('Error updating employee role:', err);
             }
